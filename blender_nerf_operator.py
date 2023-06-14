@@ -101,9 +101,9 @@ class BlenderNeRF_Operator(bpy.types.Operator):
 
             frame_data = {
                 'file_path': os.path.join(filedir, filename),
-                'transform_matrix': self.listify_matrix( camera.matrix_world ),
-                'camera_location': self.listify_matrix( camera.location ),
-                'camera_angle': self.listify_matrix( camera.rotation_euler ),
+                'transform_matrix': self.listify_matrix( camera.matrix_world ) ,
+                'camera_location': camera.location.to_tuple(),
+                'camera_angle': camera.rotation_euler[:] ,
                 'camera_focal_length': camera.data.lens
             }
 
