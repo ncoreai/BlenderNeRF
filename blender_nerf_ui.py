@@ -31,6 +31,7 @@ class BlenderNeRF_UI(bpy.types.Panel):
                 layout.prop(scene, 'render_frames')
 
             layout.prop(scene, 'logs')
+            layout.prop(scene, 'per_frame_intrinsics')
             layout.separator()
             layout.label(text='File Format')
 

@@ -25,9 +25,15 @@ class TrainTestCameras(blender_nerf_operator.BlenderNeRF_Operator):
         if len(error_messages) > 0:
            self.report({'ERROR'}, error_messages[0])
            return {'FINISHED'}
+       
+        # use the check box to specify intrinsics for each individual frame
+        if scene.per_frame_intrinsics:
+            output_train_data = {}
+            output_test_data = {}
 
-        output_train_data = self.get_camera_intrinsics(scene, train_camera)
-        output_test_data = self.get_camera_intrinsics(scene, test_camera)
+        else:
+            output_train_data = self.get_camera_intrinsics(scene, train_camera)
+            output_test_data = self.get_camera_intrinsics(scene, test_camera)
 
         # clean directory name (unsupported characters replaced) and output path
         output_dir = bpy.path.clean_name(scene.ttc_dataset_name)

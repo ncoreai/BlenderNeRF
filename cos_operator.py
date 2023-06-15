@@ -28,9 +28,13 @@ class CameraOnSphere(blender_nerf_operator.BlenderNeRF_Operator):
         if len(error_messages) > 0:
            self.report({'ERROR'}, error_messages[0])
            return {'FINISHED'}
-
-        output_data = self.get_camera_intrinsics(scene, camera)
-
+        
+        # use the check box to specify intrinsics for each individual frame
+        if scene.per_frame_intrinsics:
+            output_data = {}
+        else:
+            output_data = self.get_camera_intrinsics(scene, camera)
+            
         # clean directory name (unsupported characters replaced) and output path
         output_dir = bpy.path.clean_name(scene.cos_dataset_name)
         output_path = os.path.join(scene.save_path, output_dir)
