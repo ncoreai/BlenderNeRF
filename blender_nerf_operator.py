@@ -102,7 +102,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
                 'file_path': os.path.join(filedir, filename),
                 'transform_matrix': self.listify_matrix( camera.matrix_world ) ,
                 'camera_location': camera.location.to_tuple(),
-                'camera_euler_angle': camera.rotation_euler[:] 
+                'camera_euler_angles': camera.rotation_euler[:] 
             }
             # use the check box to specify intrinsics for each individual frame
             if scene.per_frame_intrinsics:
