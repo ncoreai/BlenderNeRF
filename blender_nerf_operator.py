@@ -11,6 +11,12 @@ OUTPUT_TEST = 'test'
 CAMERA_NAME = 'BlenderNeRF Camera'
 
 
+class NumEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (int, float, complex)):
+            return obj
+        return json.JSONEncoder.default(self, obj)
+
 # blender nerf operator parent class
 class BlenderNeRF_Operator(bpy.types.Operator):
 
@@ -114,11 +120,18 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         scene.frame_set(initFrame) # set back to initial frame
 
         return camera_extr_dict
-
-    def save_json(self, directory, filename, data, indent=4):
+    
+    def save_json(directory, filename, data, indent=4):
+        
+        # Save data as a JSON file
+        
         filepath = os.path.join(directory, filename)
+        
         with open(filepath, 'w') as file:
-            json.dump(data, file, indent=indent)
+            json.dump(data, file, indent=indent, cls=NumEncoder)
+            
+
+
 
     def is_power_of_two(self, x):
         return math.log2(x).is_integer()
