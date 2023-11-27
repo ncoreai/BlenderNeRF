@@ -112,6 +112,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
                 'camera_location': camera.location.to_tuple(),
                 'camera_euler_angles': camera.rotation_euler[:],
                 'target_location': cam_target.location.to_tuple(),
+                'quaternion': camera.rotation_quaternion[:],
             }
             # use the check box to specify intrinsics for each individual frame
             if scene.per_frame_intrinsics:
