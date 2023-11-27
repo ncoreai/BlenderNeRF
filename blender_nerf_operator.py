@@ -125,7 +125,7 @@ class BlenderNeRF_Operator(bpy.types.Operator):
 
         return camera_extr_dict
     
-    def save_json(directory, filename, data, indent=4):
+    def save_json(self, directory, filename, data, indent=4):
         
         # Save data as a JSON file
         
