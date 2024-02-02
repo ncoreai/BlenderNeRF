@@ -66,10 +66,15 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         if sensor_fit == 'VERTICAL':
             s_u = f_in_mm / sensor_size_in_mm * width_res_in_px / pixel_aspect_ratio
             s_v = f_in_mm / sensor_size_in_mm * width_res_in_px
+            
+        #calculate sensor pitch
+        pixel_pitch_x_mm = sensor_size_in_mm / width_res_in_px
+        pixel_pitch_y_mm = sensor_size_in_mm / height_res_in_px
 
         camera_intr_dict = {
             'camera_angle_x': camera_angle_x,
             'camera_angle_y': camera_angle_y,
+            'lens_focal_length_mm': f_in_mm,
             'fl_x': s_u,
             'fl_y': s_v,
             'k1': 0.0,
@@ -80,6 +85,8 @@ class BlenderNeRF_Operator(bpy.types.Operator):
             'cy': optical_center_y,
             'w': width_res_in_px,
             'h': height_res_in_px,
+            'pixel_pitch_x_mm': pixel_pitch_x_mm,
+            'pixel_pitch_y_mm': pixel_pitch_y_mm,
             'aabb_scale': scene.aabb
         }
 
