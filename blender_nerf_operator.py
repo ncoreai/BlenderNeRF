@@ -109,24 +109,26 @@ class BlenderNeRF_Operator(bpy.types.Operator):
         camera_extr_dict = []
         for frame in range(scene.frame_start, end + 1, step):
             scene.frame_set(frame)
-            filename = os.path.basename( scene.render.frame_path(frame=frame) )
-            filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')          
+            # Force dependency graph update
+            dg = bpy.context.evaluated_depsgraph_get()  # Get the dependency graph
+            camera_eval = camera.evaluated_get(dg)  # Evaluate the camera object within the dependency graph
+
+            filename = os.path.basename(scene.render.frame_path(frame=frame))
+            filedir = OUTPUT_TRAIN * (mode == 'TRAIN') + OUTPUT_TEST * (mode == 'TEST')
             cam_target = bpy.data.objects["cam_target"]
-                  
+
             frame_data = {
                 'file_path': os.path.join(filedir, filename),
-                'transform_matrix': self.listify_matrix( camera.matrix_world ) ,
-                'camera_location': camera.location.to_tuple(),
-                'camera_euler_angles': camera.rotation_euler[:],
+                'transform_matrix': self.listify_matrix(camera_eval.matrix_world),
+                'camera_location': camera_eval.location.to_tuple(),
                 'target_location': cam_target.location.to_tuple(),
-                'quaternion': camera.rotation_quaternion[:],
             }
-            # use the check box to specify intrinsics for each individual frame
             if scene.per_frame_intrinsics:
-                intrinsic_data = self.get_camera_intrinsics(scene, camera)
+                intrinsic_data = self.get_camera_intrinsics(scene, camera_eval)
                 frame_data.update(intrinsic_data)
-                
+            
             camera_extr_dict.append(frame_data)
+
 
         scene.frame_set(initFrame) # set back to initial frame
 
